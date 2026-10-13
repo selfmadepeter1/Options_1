@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <cmath>
+#include <iomanip>
 
 std::vector<double> buildVector(double start_price, double end_price, double step_size){
     std::vector<double> spotPrices{};
@@ -21,6 +21,19 @@ double payOff(double spot, double strike, bool isCall){
         double payoff = strike - spot;
         return std::max(payoff,0.0);
     }
+}
+
+std::vector<double> buildStraddle(const std::vector<double>& vector,double strike){
+    std::vector<double> straddleVector;
+    for(size_t i{}; i < vector.size(); ++i){
+        double call = payOff(vector[i], strike,true);
+        double put = payOff(vector[i], strike,false);
+        straddleVector.push_back(call + put);
+
+
+
+    }
+    return straddleVector;
 }
 
 int main(){
@@ -48,4 +61,10 @@ int main(){
 
     }
     return 0;
+    std::vector<double> spotPrices = buildVector(start_price,end_price,step_size);
+
+    for(size_t i{}; i < spotPrices.size(); ++i){
+        std::cout << std::setw(12) << spotPrices[i] << std::setw(12) << results[i] << "\n";
+
+    }
 }
